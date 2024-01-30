@@ -55,6 +55,7 @@ object Build : BuildType({
     steps {
         maven {
             goals = "clean compile"
+            id = "Maven2"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
@@ -80,6 +81,7 @@ object FastTest : BuildType({
     steps {
         maven {
             goals = "clean test"
+            id = "Maven3"
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
         }
     }
@@ -105,6 +107,7 @@ object SlowTest : BuildType({
     steps {
         maven {
             goals = "clean test"
+            id = "Maven4"
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.integration.*Test"
         }
     }
@@ -130,6 +133,7 @@ object Package : BuildType({
     steps {
         maven {
             goals = "clean package"
+            id = "Maven5"
             runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
         }
     }
