@@ -93,6 +93,13 @@ object Package_1 : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
         }
     }
+
+    dependencies {
+        snapshot(FastTest) {
+        }
+        snapshot(SlowTest) {
+        }
+    }
 })
 
 object SlowTest : BuildType({
