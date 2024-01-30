@@ -29,10 +29,14 @@ version = "2023.11"
 
 project {
 
-    buildType(SlowTest)
-    buildType(FastTest)
-    buildType(Package_1)
-    buildType(Build)
+    sequential {
+        buildType(Build)
+        parallel {
+            buildType(SlowTest)
+            buildType(FastTest)
+        }
+        buildType(Package)
+    }
 }
 
 object Build : BuildType({
@@ -78,7 +82,7 @@ object FastTest : BuildType({
     }
 })
 
-object Package_1 : BuildType({
+object Package : BuildType({
     id("Package")
     name = "Package"
 
