@@ -31,6 +31,7 @@ project {
 
     buildType(SlowTest)
     buildType(FastTest)
+    buildType(Package_1)
     buildType(Build)
 }
 
@@ -75,6 +76,11 @@ object FastTest : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
         }
     }
+})
+
+object Package_1 : BuildType({
+    id("Package")
+    name = "Package"
 })
 
 object SlowTest : BuildType({
