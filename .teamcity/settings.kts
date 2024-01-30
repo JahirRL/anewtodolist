@@ -29,6 +29,7 @@ version = "2023.11"
 
 project {
 
+    buildType(SlowTest)
     buildType(FastTest)
     buildType(Build)
 }
@@ -74,4 +75,8 @@ object FastTest : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
         }
     }
+})
+
+object SlowTest : BuildType({
+    name = "Slow Test"
 })
