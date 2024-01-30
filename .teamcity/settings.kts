@@ -76,6 +76,11 @@ object FastTest : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
         }
     }
+
+    dependencies {
+        snapshot(Build) {
+        }
+    }
 })
 
 object Package_1 : BuildType({
