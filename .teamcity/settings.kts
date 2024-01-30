@@ -71,7 +71,7 @@ object FastTest : BuildType({
         maven {
             id = "Maven2"
             goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
+            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
         }
     }
 })
