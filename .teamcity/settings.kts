@@ -121,4 +121,9 @@ object SlowTest : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.integration.*Test"
         }
     }
+
+    dependencies {
+        snapshot(Build) {
+        }
+    }
 })
