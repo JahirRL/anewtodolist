@@ -2,7 +2,6 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType.Object
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -30,19 +29,8 @@ version = "2023.11"
 
 project {
 
-    buildType(Build)
-    buildType(Package)
     buildType(FastTest)
-    buildType(SlowTest)
-
-    sequential {
-        buildType(Build)
-        parallel {
-            buildType(FastTest)
-            buildType(SlowTest)
-        }
-        buildType(Package)
-    }
+    buildType(Build)
 }
 
 object Build : BuildType({
@@ -54,8 +42,9 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "clean compile"
+            name = "TestStep"
             id = "Maven2"
+            goals = "clean test"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
@@ -73,78 +62,4 @@ object Build : BuildType({
 
 object FastTest : BuildType({
     name = "Fast Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            id = "Maven3"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-
-    features {
-        perfmon {
-        }
-    }
-})
-
-object SlowTest : BuildType({
-    name = "Slow Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            id = "Maven4"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.integration.*Test"
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-
-    features {
-        perfmon {
-        }
-    }
-})
-
-object Package : BuildType({
-    name = "Package"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean package"
-            id = "Maven5"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-
-    features {
-        perfmon {
-        }
-    }
 })
