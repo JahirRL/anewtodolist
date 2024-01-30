@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType.Object
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -30,6 +31,18 @@ version = "2023.11"
 project {
 
     buildType(Build)
+    buildType(Package)
+    buildType(FastTest)
+    buildType(SlowTest)
+
+    sequential {
+        buildType(Build)
+        parallel {
+            buildType(FastTest)
+            buildType(SlowTest)
+        }
+        buildType(Package)
+    }
 }
 
 object Build : BuildType({
@@ -55,6 +68,51 @@ object Build : BuildType({
 
     features {
         perfmon {
+        }
+    }
+})
+
+object FastTest : BuildType({
+    name = "Fast Test"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        maven {
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.unit.*Test"
+        }
+    }
+})
+
+object SlowTest : BuildType({
+    name = "Slow Test"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        maven {
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.integration.*Test"
+        }
+    }
+})
+
+object Package : BuildType({
+    name = "Package"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        maven {
+            goals = "clean package"
+            runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
         }
     }
 })
