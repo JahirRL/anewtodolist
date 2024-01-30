@@ -48,7 +48,13 @@ object TestIaC : BuildType({
     steps {
         powerShell {
             scriptMode = script {
-                content = """write-host "Hello World! This is a test with Kotlin" """
+                content = """write-host "Hello World!" """
+            }
+        }
+
+        powerShell {
+            scriptMode = script {
+                content = """write-host "This is a test made with Kotlin" """
             }
         }
     }
