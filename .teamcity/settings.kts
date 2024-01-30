@@ -1,6 +1,7 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
+import jetbrains.buildServer.configs.kotlin.buildSteps.powerShell
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
@@ -29,11 +30,40 @@ version = "2023.11"
 
 project {
 
+    buildType(TestIaC)
     buildType(SlowTest)
     buildType(FastTest)
     buildType(Package_1)
     buildType(Build)
 }
+
+object TestIaC : BuildType({
+    id("IaCTest")
+    name = "Infrastructure As Code"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        powerShell {
+            scriptMode = script {
+                content = """write-host "Hello World! This is a test with Kotlin" """
+            }
+        }
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+
+    features {
+        perfmon {
+        }
+    }
+
+})
 
 object Build : BuildType({
     name = "Build"
