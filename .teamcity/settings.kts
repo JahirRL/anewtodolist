@@ -62,4 +62,8 @@ object Build : BuildType({
 
 object FastTest : BuildType({
     name = "Fast Test"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
 })
