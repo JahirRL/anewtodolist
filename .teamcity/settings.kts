@@ -66,4 +66,12 @@ object FastTest : BuildType({
     vcs {
         root(DslContext.settingsRoot)
     }
+
+    steps {
+        maven {
+            id = "Maven2"
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true"
+        }
+    }
 })
