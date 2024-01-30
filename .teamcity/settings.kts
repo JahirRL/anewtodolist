@@ -81,6 +81,10 @@ object FastTest : BuildType({
 object Package_1 : BuildType({
     id("Package")
     name = "Package"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
 })
 
 object SlowTest : BuildType({
